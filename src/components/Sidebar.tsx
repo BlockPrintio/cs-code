@@ -35,6 +35,10 @@ export function Sidebar({
     id: 'deployment',
     icon: Rocket,
     label: 'Deploy'
+  }, {
+    id: 'settings',
+    icon: Settings,
+    label: 'Settings'
   }] as const;
   return <aside className="w-16 bg-charcoal-dark border-r border-charcoal-lighter flex flex-col items-center py-4 z-20">
       <div className="mb-8 p-2 bg-amber/10 rounded-lg text-amber">
@@ -61,13 +65,7 @@ export function Sidebar({
       </nav>
 
       <div className="flex flex-col gap-4 w-full px-2 mt-auto">
-        <button 
-          title="Settings" 
-          onClick={() => onChangeView('settings')}
-          className={`p-3 rounded-lg transition-colors flex justify-center ${currentView === 'settings' ? 'text-amber bg-amber/20' : 'text-gray-500 hover:text-gray-300 hover:bg-charcoal-lighter'}`}
-        >
-          <Settings size={20} />
-        </button>
+
         <button title="Log Out" className="p-3 text-gray-500 hover:text-terminal-red hover:bg-terminal-red/10 rounded-lg transition-colors flex justify-center">
           <LogOut size={20} />
         </button>

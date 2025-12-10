@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import Editor from '@monaco-editor/react';
 import { FileTree } from '../components/FileTree';
 import { TabBar } from '../components/TabBar';
+import { PreviewPane } from '../components/PreviewPane';
+import { TerminalBar } from '../components/TerminalBar';
 export function EditorPage() {
   const code = `import React from 'react';
 import { createRoot } from 'react-dom/client';
@@ -311,8 +313,11 @@ root.render(<App />);
       <div className="flex-1 flex flex-col min-w-0 bg-charcoal">
         <TabBar />
 
-        <div className="flex-1 relative">
-          <Editor height="100%" defaultLanguage="typescript" defaultValue={code} onMount={handleEditorDidMount} options={{
+        <div className="flex-1 flex flex-col min-w-0">
+          {/* Editor + Preview columns */}
+          <div className="flex-1 flex min-h-0">
+            <div className="flex-1 min-w-0">
+              <Editor height="100%" defaultLanguage="typescript" defaultValue={code} onMount={handleEditorDidMount} options={{
           fontFamily: 'JetBrains Mono',
           fontSize: fontSize,
           lineHeight: 24,
@@ -330,7 +335,18 @@ root.render(<App />);
             top: 16
           },
           renderLineHighlight: 'all'
-        }} />
+          }} />
+            </div>
+
+            <div className="w-1/3 min-w-0 border-l border-charcoal-lighter p-4">
+              <PreviewPane code={code} />
+            </div>
+          </div>
+
+          {/* Terminal bar below editor+preview */}
+          <div className="h-48 border-t border-charcoal-lighter p-3 bg-charcoal-darker">
+            <TerminalBar />
+          </div>
         </div>
       </div>
     </div>;
