@@ -50,14 +50,14 @@ export function Sidebar({
       <nav className="flex-1 flex flex-col gap-4 w-full px-2">
         {navItems.map(item => {
         const isActive = currentView === item.id;
-        return <button key={item.id} onClick={() => onChangeView(item.id)} className={`relative group p-3 rounded-lg transition-all duration-200 flex justify-center ${isActive ? 'text-amber bg-amber/20' : 'text-gray-500 hover:text-gray-300 hover:bg-charcoal-lighter'}`} aria-label={item.label}>
+        return <button key={item.id} onClick={() => onChangeView(item.id)} className={`relative group p-3 rounded-lg transition-all duration-200 flex justify-center ${isActive ? 'text-amber bg-amber/20' : 'text-theme-muted hover:text-theme-text hover:bg-charcoal-lighter'}`} aria-label={item.label}>
               <item.icon size={20} strokeWidth={isActive ? 2.5 : 2} />
 
               {/* Active Indicator */}
               {isActive && <motion.div layoutId="active-nav" className="absolute left-0 top-2 bottom-2 w-1 bg-amber rounded-r-full" />}
 
               {/* Tooltip */}
-              <div className="absolute left-full ml-4 px-2 py-1 bg-charcoal-lighter border border-charcoal-light text-xs text-gray-200 rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50 shadow-xl">
+              <div className="absolute left-full ml-4 px-2 py-1 bg-charcoal-lighter border border-charcoal-light text-xs text-theme-text rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50 shadow-xl">
                 {item.label}
               </div>
             </button>;
@@ -66,7 +66,7 @@ export function Sidebar({
 
       <div className="flex flex-col gap-4 w-full px-2 mt-auto">
 
-        <button title="Log Out" className="p-3 text-gray-500 hover:text-terminal-red hover:bg-terminal-red/10 rounded-lg transition-colors flex justify-center">
+        <button title="Log Out" className="p-3 text-theme-muted hover:text-terminal-red hover:bg-terminal-red/10 rounded-lg transition-colors flex justify-center">
           <LogOut size={20} />
         </button>
       </div>

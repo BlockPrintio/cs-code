@@ -25,19 +25,19 @@ export function TemplateCard({
       } as React.CSSProperties}>
           <div className="w-5 h-5 rounded-full"></div>
         </div>
-        <div className="flex items-center gap-1 text-xs text-gray-500 font-mono">
+        <div className="flex items-center gap-1 text-xs text-theme-muted font-mono">
           <Star size={12} className="text-terminal-yellow" fill="currentColor" />
           {stars}
         </div>
       </div>
 
-      <h3 className="font-semibold text-gray-100 mb-2 group-hover:text-white">
+      <h3 className="font-semibold text-theme-text mb-2 group-hover:text-theme-text">
         {title}
       </h3>
-      <p className="text-sm text-gray-400 mb-4 line-clamp-2">{description}</p>
+      <p className="text-sm text-theme-muted mb-4 line-clamp-2">{description}</p>
 
       <div className="flex flex-wrap gap-2 mb-4">
-        {tags.map(tag => <span key={tag} className="px-2 py-0.5 rounded text-[10px] font-mono bg-charcoal-lighter text-gray-400 border border-charcoal-dark">
+        {tags.map(tag => <span key={tag} className="px-2 py-0.5 rounded text-[10px] font-mono bg-charcoal-lighter text-theme-muted border border-charcoal-dark">
             {tag}
           </span>)}
       </div>

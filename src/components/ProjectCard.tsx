@@ -26,26 +26,26 @@ export function ProjectCard({
 
       <div className="flex justify-between items-start mb-3">
         <div className="flex items-center gap-3">
-          <div className={`p-2 rounded bg-charcoal-lighter ${status === 'active' ? 'text-amber' : 'text-gray-400'}`}>
+          <div className={`p-2 rounded bg-charcoal-lighter ${status === 'active' ? 'text-amber' : 'text-theme-muted'}`}>
             <Folder size={20} />
           </div>
           <div>
-            <h3 className="font-semibold text-gray-100 group-hover:text-amber transition-colors">
+            <h3 className="font-semibold text-theme-text group-hover:text-amber transition-colors">
               {title}
             </h3>
-            <span className="text-xs text-gray-500 font-mono">{language}</span>
+            <span className="text-xs text-theme-muted font-mono">{language}</span>
           </div>
         </div>
-        <button title="More options" className="text-gray-500 hover:text-gray-300 p-1 rounded hover:bg-charcoal-lighter transition-colors">
+        <button title="More options" className="text-theme-muted hover:text-theme-text p-1 rounded hover:bg-charcoal-lighter transition-colors">
           <MoreVertical size={16} />
         </button>
       </div>
 
-      <p className="text-sm text-gray-400 mb-6 line-clamp-2 h-10">
+      <p className="text-sm text-theme-muted mb-6 line-clamp-2 h-10">
         {description}
       </p>
 
-      <div className="flex items-center justify-between text-xs text-gray-500 font-mono border-t border-charcoal-lighter pt-3">
+      <div className="flex items-center justify-between text-xs text-theme-muted font-mono border-t border-charcoal-lighter pt-3">
         <div className="flex items-center gap-4">
           <span className="flex items-center gap-1.5">
             <GitBranch size={12} />

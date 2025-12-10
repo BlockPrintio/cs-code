@@ -1,5 +1,4 @@
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -11,23 +10,23 @@
     color: var(--c-text);
     @apply font-sans antialiased overflow-hidden;
   }
-  
+
   /* Custom Scrollbar */
   ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
   }
-  
+
   ::-webkit-scrollbar-track {
     background-color: var(--c-bg-dark);
   }
-  
+
   ::-webkit-scrollbar-thumb {
     background-color: var(--c-bg-light);
     border-radius: 9999px;
     border: 2px solid var(--c-bg-dark);
   }
-  
+
   ::-webkit-scrollbar-thumb:hover {
     background-color: var(--c-scrollbar-hover);
   }
@@ -36,10 +35,10 @@
 .scanline-overlay {
   background: linear-gradient(
     to bottom,
-    rgba(255,255,255,0),
-    rgba(255,255,255,0) 50%,
-    rgba(0,0,0,0.1) 50%,
-    rgba(0,0,0,0.1)
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 0) 50%,
+    rgba(0, 0, 0, 0.1) 50%,
+    rgba(0, 0, 0, 0.1)
   );
   background-size: 100% 4px;
   pointer-events: none;
@@ -54,10 +53,18 @@
 
 /* CRT Flicker Animation (Optional/Subtle) */
 @keyframes flicker {
-  0% { opacity: 0.98; }
-  5% { opacity: 0.95; }
-  10% { opacity: 0.98; }
-  100% { opacity: 0.98; }
+  0% {
+    opacity: 0.98;
+  }
+  5% {
+    opacity: 0.95;
+  }
+  10% {
+    opacity: 0.98;
+  }
+  100% {
+    opacity: 0.98;
+  }
 }
 
 .crt-flicker {
@@ -102,19 +109,19 @@
 
 /* Light Theme */
 .theme-light {
-  --c-bg: #ffffff;
+  --c-bg: #f8fafc; /* Slate 50 */
   --c-bg-dark: #f1f5f9; /* Slate 100 */
-  --c-bg-light: #e2e8f0; /* Slate 200 */
+  --c-bg-light: #ffffff; /* White */
   --c-text: #0f172a; /* Slate 900 */
-  --c-muted: #64748b; /* Slate 500 */
+  --c-muted: #475569; /* Slate 600 - Higher contrast */
   --c-amber: #b45309; /* Amber 700 - Accessible on light */
   --c-terminal-green: #15803d; /* Green 700 */
   --c-terminal-red: #b91c1c; /* Red 700 */
   --c-scrollbar-hover: #94a3b8; /* Slate 400 */
   /* Tailwind-friendly CSS variables */
-  --color-charcoal: #ffffff;
-  --color-charcoal-dark: #f1f5f9;
-  --color-charcoal-light: #cbd5e1; /* Slate 300 */
+  --color-charcoal: #f8fafc; /* Slate 50 */
+  --color-charcoal-dark: #f1f5f9; /* Slate 100 */
+  --color-charcoal-light: #ffffff; /* White */
   --color-charcoal-lighter: #e2e8f0; /* Slate 200 */
   --color-amber: #b45309;
   --color-amber-dim: #92400e;

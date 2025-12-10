@@ -4,22 +4,48 @@ import { FileTree } from '../components/FileTree';
 import { TabBar } from '../components/TabBar';
 import { PreviewPane } from '../components/PreviewPane';
 import { TerminalBar } from '../components/TerminalBar';
-export function EditorPage() {
-  const code = `import React from 'react';
-import { createRoot } from 'react-dom/client';
+import { Project, FileNode } from '../types';
 
-function App() {
-  return (
-    <div className="container">
-      <h1>Hello, World!</h1>
-      <p>Welcome to your new CS-IDE environment.</p>
-    </div>
-  );
+interface EditorPageProps {
+  project?: Project;
 }
 
-const root = createRoot(document.getElementById('root'));
-root.render(<App />);
-`;
+export function EditorPage({ project }: EditorPageProps) {
+  const [activeFileId, setActiveFileId] = useState<string | null>(null);
+
+  // Set initial active file when project loads
+  useEffect(() => {
+    if (project && project.files.length > 0 && !activeFileId) {
+      // Find first file (bfs or dfs)
+      const findFirstFile = (nodes: FileNode[]): FileNode | null => {
+        for (const node of nodes) {
+          if (node.type === 'file') return node;
+          if (node.children) {
+            const found = findFirstFile(node.children);
+            if (found) return found;
+          }
+        }
+        return null;
+      };
+      const first = findFirstFile(project.files);
+      if (first) setActiveFileId(first.id);
+    }
+  }, [project, activeFileId]);
+
+  const findFileById = (nodes: FileNode[], id: string): FileNode | null => {
+    for (const node of nodes) {
+      if (node.id === id) return node;
+      if (node.children) {
+        const found = findFileById(node.children, id);
+        if (found) return found;
+      }
+    }
+    return null;
+  };
+
+  const activeFile = project && activeFileId ? findFileById(project.files, activeFileId) : null;
+  const code = activeFile?.content || '// Select a file to view its content';
+
   const [fontSize, setFontSize] = useState<number>(() => {
     try {
       const v = localStorage.getItem('cside:editorFontSize');
@@ -308,7 +334,11 @@ root.render(<App />);
     } catch (e) { /* ignore */ }
   };
   return <div className="flex h-full overflow-hidden">
-      <FileTree />
+      <FileTree 
+        files={project?.files || []}
+        activeFileId={activeFileId}
+        onSelectFile={(file) => setActiveFileId(file.id)}
+      />
 
       <div className="flex-1 flex flex-col min-w-0 bg-charcoal">
         <TabBar />
@@ -317,10 +347,16 @@ root.render(<App />);
           {/* Editor + Preview columns */}
           <div className="flex-1 flex min-h-0">
             <div className="flex-1 min-w-0">
-              <Editor height="100%" defaultLanguage="typescript" defaultValue={code} onMount={handleEditorDidMount} options={{
-          fontFamily: 'JetBrains Mono',
-          fontSize: fontSize,
-          lineHeight: 24,
+              <Editor 
+                key={activeFileId} // Force remount on file change to reset undo stack etc
+                height="100%" 
+                defaultLanguage="typescript" 
+                value={code} 
+                onMount={handleEditorDidMount} 
+                options={{
+                  fontFamily: 'JetBrains Mono',
+                  fontSize: fontSize,
+                  lineHeight: 24,
           minimap: {
             enabled: minimap
           },

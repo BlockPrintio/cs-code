@@ -1,102 +1,120 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Rocket, CheckCircle, Clock, AlertCircle, Terminal } from 'lucide-react';
+
+interface DeploymentItem {
+  id: string;
+  network: 'MAINNET' | 'PREPROD' | 'PREVIEW';
+  version: string;
+  name: string;
+  address: string;
+  status: 'Active' | 'Deploying' | 'Failed';
+  epoch: number;
+}
+
 export function Deployment() {
-  return <div className="p-8 max-w-5xl mx-auto">
+  const [deployments, setDeployments] = useState<DeploymentItem[]>([
+    {
+      id: '1',
+      network: 'MAINNET',
+      version: 'v2.4.0',
+      name: 'dex-validator',
+      address: 'addr1qx...7k9m',
+      status: 'Active',
+      epoch: 445
+    },
+    {
+      id: '2',
+      network: 'PREPROD',
+      version: 'v2.4.1-beta',
+      name: 'dex-validator-test',
+      address: 'addr_test1qz...3n2p',
+      status: 'Active',
+      epoch: 112
+    },
+    {
+      id: '3',
+      network: 'PREVIEW',
+      version: 'v2.5.0-dev',
+      name: 'experimental-v3',
+      address: 'addr_test1qp...8x4k',
+      status: 'Active',
+      epoch: 89
+    }
+  ]);
+
+  const handleNewDeployment = () => {
+    const newDeployment: DeploymentItem = {
+      id: Math.random().toString(36).substr(2, 9),
+      network: 'PREVIEW',
+      version: 'v2.5.1-rc',
+      name: `deployment-${Math.floor(Math.random() * 1000)}`,
+      address: 'addr_test1...pending',
+      status: 'Deploying',
+      epoch: 90
+    };
+    setDeployments([newDeployment, ...deployments]);
+  };
+
+  const getNetworkColor = (network: string) => {
+    switch (network) {
+      case 'MAINNET': return 'text-terminal-green border-terminal-green/30 bg-terminal-green/20';
+      case 'PREPROD': return 'text-amber border-amber/30 bg-amber/20';
+      default: return 'text-terminal-blue border-terminal-blue/30 bg-terminal-blue/20';
+    }
+  };
+
+  return <div className="p-8 max-w-5xl mx-auto h-full overflow-y-auto">
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-100 mb-2">Deployments</h1>
-          <p className="text-gray-500">
+          <h1 className="text-3xl font-bold text-theme-text mb-2">Deployments</h1>
+          <p className="text-theme-muted">
             Deploy validator scripts to Cardano networks via Blockfrost.
           </p>
         </div>
-        <button className="bg-terminal-purple hover:bg-terminal-purple/90 text-white font-bold py-2 px-6 rounded-md flex items-center gap-2 transition-colors shadow-lg shadow-terminal-purple/20">
+        <button 
+          onClick={handleNewDeployment}
+          className="bg-terminal-purple hover:bg-terminal-purple/90 text-white font-bold py-2 px-6 rounded-md flex items-center gap-2 transition-colors shadow-lg shadow-terminal-purple/20">
           <Rocket size={18} />
           New Deployment
         </button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-        {/* Mainnet Status */}
-        <div className="bg-charcoal-light border border-terminal-green/30 rounded-lg p-6 relative overflow-hidden group">
-          <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-            <Rocket size={100} />
-          </div>
-          <div className="flex items-center gap-2 mb-4">
-            <span className="px-2 py-0.5 rounded text-xs font-bold bg-terminal-green/20 text-terminal-green border border-terminal-green/30">
-              MAINNET
-            </span>
-            <span className="text-gray-500 text-xs font-mono">v2.4.0</span>
-          </div>
-          <h3 className="text-2xl font-bold text-white mb-1">dex-validator</h3>
-          <a href="#" className="text-terminal-blue hover:underline text-sm mb-6 block font-mono">
-            addr1qx...7k9m
-          </a>
+        {deployments.map(deploy => (
+          <div key={deploy.id} className="bg-charcoal-light border border-charcoal-lighter rounded-lg p-6 relative overflow-hidden group">
+            {deploy.network === 'MAINNET' && (
+              <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                <Rocket size={100} />
+              </div>
+            )}
+            
+            <div className="flex items-center gap-2 mb-4">
+              <span className={`px-2 py-0.5 rounded text-xs font-bold border ${getNetworkColor(deploy.network)}`}>
+                {deploy.network}
+              </span>
+              <span className="text-theme-muted text-xs font-mono">{deploy.version}</span>
+            </div>
+            
+            <h3 className="text-2xl font-bold text-theme-text mb-1 truncate" title={deploy.name}>
+              {deploy.name}
+            </h3>
+            
+            <a href="#" className="text-terminal-blue hover:underline text-sm mb-6 block font-mono">
+              {deploy.address}
+            </a>
 
-          <div className="flex items-center gap-4 text-sm text-gray-400">
-            <div className="flex items-center gap-1.5">
-              <CheckCircle size={14} className="text-terminal-green" />
-              <span>Active</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <Clock size={14} />
-              <span>Epoch 445</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Preprod Status */}
-        <div className="bg-charcoal-light border border-charcoal-lighter rounded-lg p-6 relative overflow-hidden">
-          <div className="flex items-center gap-2 mb-4">
-            <span className="px-2 py-0.5 rounded text-xs font-bold bg-amber/20 text-amber border border-amber/30">
-              PREPROD
-            </span>
-            <span className="text-gray-500 text-xs font-mono">v2.4.1-beta</span>
-          </div>
-          <h3 className="text-2xl font-bold text-white mb-1">
-            dex-validator-test
-          </h3>
-          <a href="#" className="text-terminal-blue hover:underline text-sm mb-6 block font-mono">
-            addr_test1qz...3n2p
-          </a>
-
-          <div className="flex items-center gap-4 text-sm text-gray-400">
-            <div className="flex items-center gap-1.5">
-              <CheckCircle size={14} className="text-terminal-green" />
-              <span>Active</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <Clock size={14} />
-              <span>Epoch 112</span>
+            <div className="flex items-center gap-4 text-sm text-theme-muted">
+              <div className="flex items-center gap-1.5">
+                {deploy.status === 'Active' ? <CheckCircle size={14} className="text-terminal-green" /> : <Clock size={14} className="text-amber animate-pulse" />}
+                <span>{deploy.status}</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <Clock size={14} />
+                <span>Epoch {deploy.epoch}</span>
+              </div>
             </div>
           </div>
-        </div>
-
-        {/* Preview Status */}
-        <div className="bg-charcoal-light border border-charcoal-lighter rounded-lg p-6 relative overflow-hidden">
-          <div className="flex items-center gap-2 mb-4">
-            <span className="px-2 py-0.5 rounded text-xs font-bold bg-terminal-blue/20 text-terminal-blue border border-terminal-blue/30">
-              PREVIEW
-            </span>
-            <span className="text-gray-500 text-xs font-mono">v2.5.0-dev</span>
-          </div>
-          <h3 className="text-2xl font-bold text-white mb-1">
-            experimental-v3
-          </h3>
-          <a href="#" className="text-terminal-blue hover:underline text-sm mb-6 block font-mono">
-            addr_test1qp...8x4k
-          </a>
-
-          <div className="flex items-center gap-4 text-sm text-gray-400">
-            <div className="flex items-center gap-1.5">
-              <CheckCircle size={14} className="text-terminal-green" />
-              <span>Active</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <Clock size={14} />
-              <span>Epoch 89</span>
-            </div>
-          </div>
-        </div>
+        ))}
       </div>
 
       {/* Activity Log */}

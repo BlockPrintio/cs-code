@@ -4,16 +4,16 @@ import { Search } from 'lucide-react';
 export function Templates() {
   return <div className="p-8 h-full overflow-y-auto">
       <header className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-100 mb-2">
+        <h1 className="text-3xl font-bold text-theme-text mb-2">
           Template Library
         </h1>
-        <p className="text-gray-500 mb-6">
+        <p className="text-theme-muted mb-6">
           Jumpstart your development with production-ready boilerplates.
         </p>
 
         <div className="relative max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
-          <input type="text" placeholder="Search templates..." className="w-full bg-charcoal-light border border-charcoal-lighter rounded-md py-2 pl-10 pr-4 text-gray-300 focus:outline-none focus:border-amber focus:ring-1 focus:ring-amber transition-all placeholder:text-gray-600" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-theme-muted" size={18} />
+          <input type="text" placeholder="Search templates..." className="w-full bg-charcoal-light border border-charcoal-lighter rounded-md py-2 pl-10 pr-4 text-theme-text focus:outline-none focus:border-amber focus:ring-1 focus:ring-amber transition-all placeholder:text-theme-muted" />
         </div>
       </header>
 

@@ -20,6 +20,10 @@ export default {
           dim: 'var(--color-amber-dim, #cc9356)',
           glow: 'var(--color-amber-glow, rgba(255, 184, 108, 0.15))'
         },
+        theme: {
+          text: 'var(--c-text)',
+          muted: 'var(--c-muted)',
+        },
         terminal: {
           green: 'var(--color-terminal-green, #50fa7b)',
           red: 'var(--color-terminal-red, #ff5555)',
