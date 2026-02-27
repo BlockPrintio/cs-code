@@ -1,7 +1,7 @@
 import { LayoutDashboard, Code, LayoutTemplate, TestTube, Wallet, Rocket, Settings, LogOut } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-type View = 'dashboard' | 'editor' | 'templates' | 'testing' | 'wallet' | 'deployment' | 'settings';
+type View = 'landing' | 'dashboard' | 'editor' | 'templates' | 'testing' | 'wallet' | 'deployment' | 'settings';
 
 interface SidebarProps {
   currentView: View;
@@ -41,11 +41,15 @@ export function Sidebar({
     label: 'Settings'
   }] as const;
   return <aside className="w-16 bg-charcoal-dark border-r border-charcoal-lighter flex flex-col items-center py-4 z-20">
-      <div className="mb-8 p-2 bg-amber/10 rounded-lg text-amber">
+      <button
+        className="mb-8 p-2 bg-amber/10 rounded-lg text-amber hover:bg-amber/20 transition-colors"
+        onClick={() => onChangeView('landing')}
+        title="Back to landing"
+      >
         <div className="w-6 h-6 border-2 border-amber rounded-sm flex items-center justify-center font-mono font-bold text-xs">
           CS
         </div>
-      </div>
+      </button>
 
       <nav className="flex-1 flex flex-col gap-4 w-full px-2">
         {navItems.map(item => {

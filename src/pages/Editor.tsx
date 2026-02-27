@@ -360,10 +360,11 @@ export function EditorPage({ project }: EditorPageProps) {
 
         {activeFileId && <Breadcrumb path={breadcrumbPath} />}
 
-        <div className="flex-1 flex flex-col min-w-0">
-          {/* Editor + Preview columns */}
-          <div className="flex-1 flex min-h-0">
-            <div className="flex-1 min-w-0">
+        <div className="flex-1 flex flex-col min-w-0 overflow-x-auto">
+          <div className="min-w-[980px] flex-1 flex flex-col">
+            {/* Editor + Preview columns */}
+            <div className="flex-1 flex min-h-0">
+              <div className="flex-1 min-w-0">
               <Editor 
                 key={activeFileId} // Force remount on file change to reset undo stack etc
                 height="100%" 
@@ -391,14 +392,15 @@ export function EditorPage({ project }: EditorPageProps) {
           }} />
             </div>
 
-            <div className="w-1/3 min-w-0 border-l border-charcoal-lighter p-4">
-              <PreviewPane code={code} />
+              <div className="w-1/3 min-w-[320px] border-l border-charcoal-lighter p-4">
+                <PreviewPane code={code} />
+              </div>
             </div>
-          </div>
 
-          {/* Terminal bar below editor+preview */}
-          <div className="h-48 border-t border-charcoal-lighter p-3 bg-charcoal-darker">
-            <TerminalBar />
+            {/* Terminal bar below editor+preview */}
+            <div className="h-48 border-t border-charcoal-lighter p-3 bg-charcoal-darker">
+              <TerminalBar />
+            </div>
           </div>
         </div>
       </div>

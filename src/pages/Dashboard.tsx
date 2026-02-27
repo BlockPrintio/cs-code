@@ -23,20 +23,20 @@ export function Dashboard({
   onPushProject,
   onRenameProject
 }: DashboardProps) {
-  return <div className="p-8 h-full overflow-y-auto">
-      <header className="mb-8 flex justify-between items-end">
+    return <div className="p-4 sm:p-6 lg:p-8 h-full overflow-y-auto">
+      <header className="mb-8 flex flex-col lg:flex-row lg:justify-between lg:items-end gap-4">
         <div>
           <h1 className="text-3xl font-bold text-theme-text mb-2">Dashboard</h1>
           <p className="text-theme-muted">
             Welcome back, Developer. You have {projects.filter(p => p.status === 'active').length} active projects.
           </p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto">
           {onSignIn && (
             <>
               <button
                 onClick={() => onSignIn('google')}
-                className="flex items-center gap-2 px-3 py-2 rounded-md bg-charcoal-lighter hover:bg-charcoal-light text-theme-muted hover:text-theme-text transition-colors border border-charcoal-lighter"
+                className="flex items-center justify-center gap-2 px-3 py-2 rounded-md bg-charcoal-lighter hover:bg-charcoal-light text-theme-muted hover:text-theme-text transition-colors border border-charcoal-lighter w-full sm:w-auto"
                 title="Sign in with Google"
               >
                 <Chrome size={16} />
@@ -44,7 +44,7 @@ export function Dashboard({
               </button>
               <button
                 onClick={() => onSignIn('github')}
-                className="flex items-center gap-2 px-3 py-2 rounded-md bg-charcoal-lighter hover:bg-charcoal-light text-theme-muted hover:text-theme-text transition-colors border border-charcoal-lighter"
+                className="flex items-center justify-center gap-2 px-3 py-2 rounded-md bg-charcoal-lighter hover:bg-charcoal-light text-theme-muted hover:text-theme-text transition-colors border border-charcoal-lighter w-full sm:w-auto"
                 title="Sign in with GitHub"
               >
                 <Github size={16} />
@@ -54,7 +54,7 @@ export function Dashboard({
           )}
           <button 
             onClick={onCreateProject}
-            className="bg-amber hover:bg-amber-dim text-charcoal-dark font-bold py-2 px-4 rounded-md flex items-center gap-2 transition-colors">
+            className="bg-amber hover:bg-amber-dim text-charcoal-dark font-bold py-2 px-4 rounded-md flex items-center justify-center gap-2 transition-colors w-full sm:w-auto">
             <Plus size={18} />
             New Project
           </button>

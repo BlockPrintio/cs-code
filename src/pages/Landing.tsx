@@ -11,7 +11,7 @@ export function Landing({ onGetStarted, onAuth }: LandingProps) {
     <div className="min-h-screen text-gray-200 bg-[radial-gradient(1200px_circle_at_20%_-10%,rgba(251,191,36,0.25),transparent_60%),radial-gradient(900px_circle_at_80%_-20%,rgba(96,165,250,0.2),transparent_55%),linear-gradient(180deg,#020617_0%,#0b1020_55%,#0f172a_100%)]">
       <div className="scanline-overlay" />
 
-      <header className="max-w-6xl mx-auto px-8 pt-8 flex items-center justify-between">
+      <header className="max-w-6xl mx-auto px-4 sm:px-8 pt-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-md border border-amber/40 bg-amber/10 text-amber flex items-center justify-center font-mono font-bold">
             CS
@@ -23,14 +23,14 @@ export function Landing({ onGetStarted, onAuth }: LandingProps) {
         </div>
         <button
           onClick={onGetStarted}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-amber text-charcoal-dark font-semibold hover:bg-amber-dim transition-colors"
+          className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-md bg-amber text-charcoal-dark font-semibold hover:bg-amber-dim transition-colors w-full sm:w-auto"
         >
           Get Started
           <ArrowRight size={16} />
         </button>
       </header>
 
-      <section className="max-w-6xl mx-auto px-8 pt-16 pb-12">
+      <section className="max-w-6xl mx-auto px-4 sm:px-8 pt-16 pb-12">
         <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-10 items-center">
           <div>
             <div className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-amber/70 font-mono">
@@ -44,17 +44,17 @@ export function Landing({ onGetStarted, onAuth }: LandingProps) {
               CS Code unifies templates, testing, and deployment flows for the main Cardano dApp lifecycle. Ship
               validators, integrate wallets, and push code to GitHub with confidence.
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-8 flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
               <button
                 onClick={onGetStarted}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-terminal-green text-charcoal-dark font-semibold hover:bg-terminal-green/90 transition-colors"
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-md bg-terminal-green text-charcoal-dark font-semibold hover:bg-terminal-green/90 transition-colors w-full sm:w-auto"
               >
                 Launch the IDE
                 <ArrowRight size={16} />
               </button>
               <a
                 href="#auth"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md border border-charcoal-lighter text-gray-200 hover:border-amber/60 hover:text-amber transition-colors"
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-md border border-charcoal-lighter text-gray-200 hover:border-amber/60 hover:text-amber transition-colors w-full sm:w-auto"
               >
                 Connect account
               </a>
@@ -95,7 +95,7 @@ export function Landing({ onGetStarted, onAuth }: LandingProps) {
         </div>
       </section>
 
-      <section className="max-w-6xl mx-auto px-8 py-12">
+      <section className="max-w-6xl mx-auto px-4 sm:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-charcoal/70 border border-charcoal-lighter rounded-xl p-5">
             <Blocks className="text-terminal-blue mb-3" />
@@ -121,7 +121,7 @@ export function Landing({ onGetStarted, onAuth }: LandingProps) {
         </div>
       </section>
 
-      <section className="max-w-6xl mx-auto px-8 py-12" id="auth">
+      <section className="max-w-6xl mx-auto px-4 sm:px-8 py-12" id="auth">
         <div className="bg-charcoal/80 border border-charcoal-lighter rounded-2xl p-8">
           <div className="flex flex-col lg:flex-row gap-8 items-center justify-between">
             <div>
@@ -150,7 +150,7 @@ export function Landing({ onGetStarted, onAuth }: LandingProps) {
         </div>
       </section>
 
-      <footer className="max-w-6xl mx-auto px-8 pb-10 pt-4 text-xs text-gray-500 flex items-center justify-between">
+      <footer className="max-w-6xl mx-auto px-4 sm:px-8 pb-10 pt-4 text-xs text-gray-500 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <span className="font-mono">CS Code • Cardano Studio</span>
         <button onClick={onGetStarted} className="text-amber hover:text-amber/80 transition-colors">
           Start building

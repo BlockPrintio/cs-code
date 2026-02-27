@@ -59,7 +59,7 @@ export function FileTree({ files, activeFileId, onSelectFile }: FileTreeProps) {
       </div>;
   };
 
-  return <div className="w-64 bg-charcoal-dark border-r border-charcoal-lighter flex flex-col h-full">
+  return <div className="w-56 sm:w-64 bg-charcoal-dark border-r border-charcoal-lighter flex flex-col h-full">
       <div className="p-3 text-xs font-bold text-gray-500 tracking-wider uppercase flex items-center gap-2 border-b border-charcoal-lighter/50">
         <Files size={16} className="text-gray-400" />
         <span>Explorer</span>
