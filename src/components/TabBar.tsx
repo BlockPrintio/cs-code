@@ -21,14 +21,11 @@ const tabs: Tab[] = [{
   active: false
 }];
 export function TabBar() {
-  return <div className="flex bg-charcoal-dark border-b border-charcoal-lighter overflow-x-auto no-scrollbar">
+  return <div className="flex bg-charcoal-dark border-b border-charcoal-lighter overflow-x-auto no-scrollbar h-9">
       {tabs.map(tab => <div key={tab.id} className={`
-            group flex items-center gap-2 px-4 py-2.5 text-sm font-mono cursor-pointer border-r border-charcoal-lighter min-w-[120px] max-w-[200px] relative
-            ${tab.active ? 'bg-charcoal text-gray-100' : 'bg-charcoal-dark text-gray-500 hover:bg-charcoal-light hover:text-gray-300'}
+            group flex items-center gap-2 px-3 text-xs font-mono cursor-pointer border-r border-charcoal-lighter min-w-[120px] max-w-[200px] relative h-9
+            ${tab.active ? 'bg-charcoal text-gray-100 border-t-2 border-amber' : 'bg-charcoal-dark text-gray-500 hover:bg-charcoal-light hover:text-gray-300'}
           `}>
-          {/* Top Active Indicator */}
-          {tab.active && <div className="absolute top-0 left-0 right-0 h-[2px] bg-amber" />}
-
           <span className="truncate flex-1">{tab.name}</span>
 
           <div className="flex items-center justify-center w-5 h-5 rounded hover:bg-charcoal-lighter/50 text-transparent group-hover:text-gray-400 hover:!text-gray-200 transition-all">

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Editor from '@monaco-editor/react';
 import { FileTree } from '../components/FileTree';
 import { TabBar } from '../components/TabBar';
+import { Breadcrumb } from '../components/Breadcrumb';
 import { PreviewPane } from '../components/PreviewPane';
 import { TerminalBar } from '../components/TerminalBar';
 import { Project, FileNode } from '../types';
@@ -43,7 +44,21 @@ export function EditorPage({ project }: EditorPageProps) {
     return null;
   };
 
+  const getBreadcrumbPath = (nodes: FileNode[], id: string, path: string[] = []): string[] => {
+    for (const node of nodes) {
+      if (node.id === id) {
+        return [...path, node.name];
+      }
+      if (node.children) {
+        const found = getBreadcrumbPath(node.children, id, [...path, node.name]);
+        if (found.length > path.length) return found;
+      }
+    }
+    return path;
+  };
+
   const activeFile = project && activeFileId ? findFileById(project.files, activeFileId) : null;
+  const breadcrumbPath = project && activeFileId ? getBreadcrumbPath(project.files, activeFileId) : [];
   const code = activeFile?.content || '// Select a file to view its content';
 
   const [fontSize, setFontSize] = useState<number>(() => {
@@ -342,6 +357,8 @@ export function EditorPage({ project }: EditorPageProps) {
 
       <div className="flex-1 flex flex-col min-w-0 bg-charcoal">
         <TabBar />
+
+        {activeFileId && <Breadcrumb path={breadcrumbPath} />}
 
         <div className="flex-1 flex flex-col min-w-0">
           {/* Editor + Preview columns */}
