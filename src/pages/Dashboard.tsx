@@ -1,16 +1,28 @@
 import React from 'react';
 import { ProjectCard } from '../components/ProjectCard';
 import { TemplateCard } from '../components/TemplateCard';
-import { Plus, Atom, Layers, Shield, Cpu } from 'lucide-react';
+import { Plus, Atom, Layers, Shield, Cpu, Github, Chrome } from 'lucide-react';
 import { Project } from '../types';
 
 interface DashboardProps {
   projects: Project[];
   onOpenProject: (id: string) => void;
   onCreateProject: () => void;
+  onSignIn?: (provider: 'google' | 'github') => void;
+  onDownloadProject?: (projectId: string) => void;
+  onPushProject?: (projectId: string) => void;
+  onRenameProject?: (projectId: string, newTitle: string) => void;
 }
 
-export function Dashboard({ projects, onOpenProject, onCreateProject }: DashboardProps) {
+export function Dashboard({
+  projects,
+  onOpenProject,
+  onCreateProject,
+  onSignIn,
+  onDownloadProject,
+  onPushProject,
+  onRenameProject
+}: DashboardProps) {
   return <div className="p-8 h-full overflow-y-auto">
       <header className="mb-8 flex justify-between items-end">
         <div>
@@ -19,26 +31,52 @@ export function Dashboard({ projects, onOpenProject, onCreateProject }: Dashboar
             Welcome back, Developer. You have {projects.filter(p => p.status === 'active').length} active projects.
           </p>
         </div>
-        <button 
-          onClick={onCreateProject}
-          className="bg-amber hover:bg-amber-dim text-charcoal-dark font-bold py-2 px-4 rounded-md flex items-center gap-2 transition-colors">
-          <Plus size={18} />
-          New Project
-        </button>
+        <div className="flex items-center gap-3">
+          {onSignIn && (
+            <>
+              <button
+                onClick={() => onSignIn('google')}
+                className="flex items-center gap-2 px-3 py-2 rounded-md bg-charcoal-lighter hover:bg-charcoal-light text-theme-muted hover:text-theme-text transition-colors border border-charcoal-lighter"
+                title="Sign in with Google"
+              >
+                <Chrome size={16} />
+                <span className="text-sm font-mono">Google</span>
+              </button>
+              <button
+                onClick={() => onSignIn('github')}
+                className="flex items-center gap-2 px-3 py-2 rounded-md bg-charcoal-lighter hover:bg-charcoal-light text-theme-muted hover:text-theme-text transition-colors border border-charcoal-lighter"
+                title="Sign in with GitHub"
+              >
+                <Github size={16} />
+                <span className="text-sm font-mono">GitHub</span>
+              </button>
+            </>
+          )}
+          <button 
+            onClick={onCreateProject}
+            className="bg-amber hover:bg-amber-dim text-charcoal-dark font-bold py-2 px-4 rounded-md flex items-center gap-2 transition-colors">
+            <Plus size={18} />
+            New Project
+          </button>
+        </div>
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {projects.map(project => (
-          <div key={project.id} onClick={() => onOpenProject(project.id)} className="cursor-pointer">
-            <ProjectCard 
-              title={project.title} 
-              description={project.description} 
-              language={project.language} 
-              lastEdited={project.lastEdited} 
-              branch={project.branch} 
-              status={project.status} 
-            />
-          </div>
+          <ProjectCard
+            key={project.id}
+            id={project.id}
+            title={project.title} 
+            description={project.description} 
+            language={project.language} 
+            lastEdited={project.lastEdited} 
+            branch={project.branch} 
+            status={project.status} 
+            onOpen={onOpenProject}
+            onDownload={onDownloadProject}
+            onPushGithub={onPushProject}
+            onRenameProject={onRenameProject}
+          />
         ))}
       </div>
 

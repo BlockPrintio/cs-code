@@ -41,6 +41,27 @@ export function App() {
     handleOpenProject(newProject.id);
   };
 
+  const handleSignIn = (provider: 'google' | 'github') => {
+    // TODO: Implement OAuth flow with Google/GitHub
+    console.log(`Signing in with ${provider}`);
+    // For now, just log the event
+  };
+
+  const handleDownloadProject = (projectId: string) => {
+    // TODO: Implement project download (zip export)
+    console.log(`Downloading project: ${projectId}`);
+  };
+
+  const handlePushProject = (projectId: string) => {
+    // TODO: Implement GitHub push
+    console.log(`Pushing project to GitHub: ${projectId}`);
+  };
+
+  const handleRenameProject = (projectId: string, newTitle: string) => {
+    setProjects(projects.map(p => p.id === projectId ? { ...p, title: newTitle } : p));
+    console.log(`Renamed project ${projectId} to ${newTitle}`);
+  };
+
   const activeProject = projects.find(p => p.id === activeProjectId);
 
   const renderView = () => {
@@ -57,6 +78,10 @@ export function App() {
           projects={projects} 
           onOpenProject={handleOpenProject}
           onCreateProject={handleCreateProject}
+          onSignIn={handleSignIn}
+          onDownloadProject={handleDownloadProject}
+          onPushProject={handlePushProject}
+          onRenameProject={handleRenameProject}
         />;
       case 'editor':
         return <EditorPage project={activeProject} />;
@@ -75,6 +100,10 @@ export function App() {
           projects={projects} 
           onOpenProject={handleOpenProject}
           onCreateProject={handleCreateProject}
+          onSignIn={handleSignIn}
+          onDownloadProject={handleDownloadProject}
+          onPushProject={handlePushProject}
+          onRenameProject={handleRenameProject}
         />;
     }
   };
