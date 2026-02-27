@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import Editor from '@monaco-editor/react';
+import Split from 'react-split';
 import { FileTree } from '../components/FileTree';
 import { TabBar } from '../components/TabBar';
 import { Breadcrumb } from '../components/Breadcrumb';
-import { PreviewPane } from '../components/PreviewPane';
+import { SandboxPreview, ConsoleLog } from '../components/SandboxPreview';
+import { ConsoleOutput } from '../components/ConsoleOutput';
+import { DependencyManager, Dependency } from '../components/DependencyManager';
+import { CardanoTools } from '../components/CardanoTools';
 import { TerminalBar } from '../components/TerminalBar';
 import { Project, FileNode } from '../types';
+import { Layers, Package, Hammer } from 'lucide-react';
 
 interface EditorPageProps {
   project?: Project;
@@ -13,6 +18,13 @@ interface EditorPageProps {
 
 export function EditorPage({ project }: EditorPageProps) {
   const [activeFileId, setActiveFileId] = useState<string | null>(null);
+  const [consoleLogs, setConsoleLogs] = useState<ConsoleLog[]>([]);
+  const [rightPanel, setRightPanel] = useState<'preview' | 'dependencies' | 'cardano'>('preview');
+  const [bottomPanel, setBottomPanel] = useState<'console' | 'terminal'>('console');
+  const [dependencies, setDependencies] = useState<Dependency[]>([
+    { name: '@lucid-evolution/lucid', version: 'latest', type: 'dependencies' },
+    { name: '@meshsdk/core', version: 'latest', type: 'dependencies' },
+  ]);
 
   // Set initial active file when project loads
   useEffect(() => {
@@ -60,6 +72,53 @@ export function EditorPage({ project }: EditorPageProps) {
   const activeFile = project && activeFileId ? findFileById(project.files, activeFileId) : null;
   const breadcrumbPath = project && activeFileId ? getBreadcrumbPath(project.files, activeFileId) : [];
   const code = activeFile?.content || '// Select a file to view its content';
+
+  // Convert file tree to files object for SandboxPreview
+  const getFilesObject = (nodes: FileNode[], basePath = ''): Record<string, string> => {
+    const files: Record<string, string> = {};
+    nodes.forEach(node => {
+      const path = basePath ? `${basePath}/${node.name}` : node.name;
+      if (node.type === 'file' && node.content) {
+        files[path] = node.content;
+      }
+      if (node.children) {
+        Object.assign(files, getFilesObject(node.children, path));
+      }
+    });
+    return files;
+  };
+
+  const filesForPreview = project ? getFilesObject(project.files) : {};
+
+  const handleAddDependency = (name: string, version: string, type: 'dependencies' | 'devDependencies') => {
+    setDependencies(prev => [...prev, { name, version, type }]);
+  };
+
+  const handleRemoveDependency = (name: string) => {
+    setDependencies(prev => prev.filter(d => d.name !== name));
+  };
+
+  const handleInstallDependencies = () => {
+    console.log('Installing dependencies...', dependencies);
+    // In a real implementation, this would trigger npm install
+  };
+
+  const handleGenerateWallet = () => {
+    console.log('Generating test wallet...');
+    // Implementation for generating Cardano test wallet
+  };
+
+  const handleCreateContract = () => {
+    console.log('Creating smart contract...');
+  };
+
+  const handleValidateMetadata = () => {
+    console.log('Validating metadata...');
+  };
+
+  const handleClearConsole = () => {
+    setConsoleLogs([]);
+  };
 
   const [fontSize, setFontSize] = useState<number>(() => {
     try {
@@ -348,6 +407,7 @@ export function EditorPage({ project }: EditorPageProps) {
       });
     } catch (e) { /* ignore */ }
   };
+  
   return <div className="flex h-full overflow-hidden">
       <FileTree 
         files={project?.files || []}
@@ -360,47 +420,162 @@ export function EditorPage({ project }: EditorPageProps) {
 
         {activeFileId && <Breadcrumb path={breadcrumbPath} />}
 
-        <div className="flex-1 flex flex-col min-w-0 overflow-x-auto">
-          <div className="min-w-[980px] flex-1 flex flex-col">
-            {/* Editor + Preview columns */}
-            <div className="flex-1 flex min-h-0">
-              <div className="flex-1 min-w-0">
-              <Editor 
-                key={activeFileId} // Force remount on file change to reset undo stack etc
-                height="100%" 
-                defaultLanguage="typescript" 
-                value={code} 
-                onMount={handleEditorDidMount} 
-                options={{
-                  fontFamily: 'JetBrains Mono',
-                  fontSize: fontSize,
-                  lineHeight: 24,
-          minimap: {
-            enabled: minimap
-          },
-          tabSize: tabSize,
-          lineNumbers: lineNumbers,
-          wordWrap: wordWrap,
-          scrollBeyondLastLine: false,
-          smoothScrolling: true,
-          cursorBlinking: 'smooth',
-          cursorSmoothCaretAnimation: 'on',
-          padding: {
-            top: 16
-          },
-          renderLineHighlight: 'all'
-          }} />
-            </div>
-
-              <div className="w-1/3 min-w-[320px] border-l border-charcoal-lighter p-4">
-                <PreviewPane code={code} />
+        <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+          <div className="flex-1 flex flex-col">
+            {/* Editor + Right Panel */}
+            <Split
+              className="flex-1 flex min-h-0"
+              sizes={[60, 40]}
+              minSize={[400, 300]}
+              gutterSize={4}
+              direction="horizontal"
+            >
+              {/* Editor Section */}
+              <div className="flex flex-col min-w-0">
+                <div className="flex-1 min-w-0">
+                  <Editor 
+                    key={activeFileId}
+                    height="100%" 
+                    defaultLanguage="typescript" 
+                    value={code} 
+                    onMount={handleEditorDidMount} 
+                    options={{
+                      fontFamily: 'JetBrains Mono',
+                      fontSize: fontSize,
+                      lineHeight: 24,
+                      minimap: {
+                        enabled: minimap
+                      },
+                      tabSize: tabSize,
+                      lineNumbers: lineNumbers,
+                      wordWrap: wordWrap,
+                      scrollBeyondLastLine: false,
+                      smoothScrolling: true,
+                      cursorBlinking: 'smooth',
+                      cursorSmoothCaretAnimation: 'on',
+                      padding: {
+                        top: 16
+                      },
+                      renderLineHighlight: 'all'
+                    }} 
+                  />
+                </div>
               </div>
-            </div>
 
-            {/* Terminal bar below editor+preview */}
-            <div className="h-48 border-t border-charcoal-lighter p-3 bg-charcoal-darker">
-              <TerminalBar />
-            </div>
+              {/* Right Panel */}
+              <div className="flex flex-col min-w-0 border-l border-charcoal-lighter">
+                {/* Right Panel Tabs */}
+                <div className="flex items-center gap-1 px-2 py-2 border-b border-charcoal-lighter bg-charcoal-darker">
+                  <button
+                    onClick={() => setRightPanel('preview')}
+                    className={`flex items-center gap-2 px-3 py-1.5 rounded text-sm font-medium transition-colors ${
+                      rightPanel === 'preview'
+                        ? 'bg-amber-600 text-white'
+                        : 'text-slate-400 hover:text-slate-200 hover:bg-charcoal-lighter'
+                    }`}
+                  >
+                    <Layers className="w-4 h-4" />
+                    Preview
+                  </button>
+                  <button
+                    onClick={() => setRightPanel('dependencies')}
+                    className={`flex items-center gap-2 px-3 py-1.5 rounded text-sm font-medium transition-colors ${
+                      rightPanel === 'dependencies'
+                        ? 'bg-amber-600 text-white'
+                        : 'text-slate-400 hover:text-slate-200 hover:bg-charcoal-lighter'
+                    }`}
+                  >
+                    <Package className="w-4 h-4" />
+                    Packages
+                  </button>
+                  <button
+                    onClick={() => setRightPanel('cardano')}
+                    className={`flex items-center gap-2 px-3 py-1.5 rounded text-sm font-medium transition-colors ${
+                      rightPanel === 'cardano'
+                        ? 'bg-amber-600 text-white'
+                        : 'text-slate-400 hover:text-slate-200 hover:bg-charcoal-lighter'
+                    }`}
+                  >
+                    <Hammer className="w-4 h-4" />
+                    Cardano
+                  </button>
+                </div>
+
+                {/* Right Panel Content */}
+                <div className="flex-1 min-h-0">
+                  {rightPanel === 'preview' && (
+                    <SandboxPreview 
+                      files={filesForPreview}
+                      activeFile={activeFile?.name}
+                      onConsoleLog={(logs) => setConsoleLogs(logs)}
+                    />
+                  )}
+                  {rightPanel === 'dependencies' && (
+                    <DependencyManager
+                      dependencies={dependencies}
+                      onAdd={handleAddDependency}
+                      onRemove={handleRemoveDependency}
+                      onInstall={handleInstallDependencies}
+                    />
+                  )}
+                  {rightPanel === 'cardano' && (
+                    <CardanoTools
+                      onGenerateWallet={handleGenerateWallet}
+                      onCreateContract={handleCreateContract}
+                      onValidateMetadata={handleValidateMetadata}
+                    />
+                  )}
+                </div>
+              </div>
+            </Split>
+
+            {/* Bottom Panel */}
+            <Split
+              className="border-t border-charcoal-lighter"
+              sizes={[70, 30]}
+              minSize={[0, 150]}
+              maxSize={[Infinity, 400]}
+              gutterSize={4}
+              direction="vertical"
+            >
+              <div />
+              <div className="bg-charcoal-darker">
+                {/* Bottom Panel Tabs */}
+                <div className="flex items-center gap-1 px-2 py-1 border-b border-charcoal-lighter">
+                  <button
+                    onClick={() => setBottomPanel('console')}
+                    className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
+                      bottomPanel === 'console'
+                        ? 'bg-amber-600 text-white'
+                        : 'text-slate-400 hover:text-slate-200 hover:bg-charcoal-lighter'
+                    }`}
+                  >
+                    Console
+                  </button>
+                  <button
+                    onClick={() => setBottomPanel('terminal')}
+                    className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
+                      bottomPanel === 'terminal'
+                        ? 'bg-amber-600 text-white'
+                        : 'text-slate-400 hover:text-slate-200 hover:bg-charcoal-lighter'
+                    }`}
+                  >
+                    Terminal
+                  </button>
+                </div>
+
+                {/* Bottom Panel Content */}
+                <div className="h-full">
+                  {bottomPanel === 'console' ? (
+                    <ConsoleOutput logs={consoleLogs} onClear={handleClearConsole} />
+                  ) : (
+                    <div className="h-full p-3">
+                      <TerminalBar />
+                    </div>
+                  )}
+                </div>
+              </div>
+            </Split>
           </div>
         </div>
       </div>
