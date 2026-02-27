@@ -8,7 +8,7 @@
   body {
     background-color: var(--c-bg);
     color: var(--c-text);
-    @apply font-sans antialiased overflow-hidden;
+    @apply font-sans antialiased;
   }
 
   /* Custom Scrollbar */

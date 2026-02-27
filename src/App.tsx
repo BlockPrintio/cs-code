@@ -8,14 +8,15 @@ import { Testing } from './pages/Testing';
 import { Wallet } from './pages/Wallet';
 import { Deployment } from './pages/Deployment';
 import { Settings } from './pages/Settings';
+import { Landing } from './pages/Landing';
 import { motion, AnimatePresence } from 'framer-motion';
 import { mockProjects } from './data/mockProjects';
 import { Project } from './types';
 
-type View = 'dashboard' | 'editor' | 'templates' | 'testing' | 'wallet' | 'deployment' | 'settings';
+type View = 'landing' | 'dashboard' | 'editor' | 'templates' | 'testing' | 'wallet' | 'deployment' | 'settings';
 
 export function App() {
-  const [currentView, setCurrentView] = useState<View>('dashboard');
+  const [currentView, setCurrentView] = useState<View>('landing');
   const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
   const [projects, setProjects] = useState<Project[]>(mockProjects);
 
@@ -44,6 +45,13 @@ export function App() {
 
   const renderView = () => {
     switch (currentView) {
+      case 'landing':
+        return (
+          <Landing
+            onGetStarted={() => setCurrentView('dashboard')}
+            onAuth={() => setCurrentView('dashboard')}
+          />
+        );
       case 'dashboard':
         return <Dashboard 
           projects={projects} 
@@ -70,6 +78,12 @@ export function App() {
         />;
     }
   };
+  if (currentView === 'landing') {
+    return <div className="h-screen w-full font-sans selection:bg-amber/30 selection:text-amber">
+        {renderView()}
+      </div>;
+  }
+
   return <div className="flex flex-col h-screen w-full bg-charcoal text-gray-300 overflow-hidden font-sans selection:bg-amber/30 selection:text-amber">
       <div className="scanline-overlay" />
 
