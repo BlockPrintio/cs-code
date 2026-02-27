@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Rocket, CheckCircle, Clock, AlertCircle, Terminal } from 'lucide-react';
+import { useToast } from '../components/ToastProvider';
 
 interface DeploymentItem {
   id: string;
@@ -12,13 +13,14 @@ interface DeploymentItem {
 }
 
 export function Deployment() {
+  const { addToast } = useToast();
   const [deployments, setDeployments] = useState<DeploymentItem[]>([
     {
       id: '1',
       network: 'MAINNET',
       version: 'v2.4.0',
       name: 'dex-validator',
-      address: 'addr1qx...7k9m',
+      address: 'addr1qxq2fxv9z6p0qqy4rqm9y86gm5d9ff0w0eahgwe2g8khp5q3k8p',
       status: 'Active',
       epoch: 445
     },
@@ -27,7 +29,7 @@ export function Deployment() {
       network: 'PREPROD',
       version: 'v2.4.1-beta',
       name: 'dex-validator-test',
-      address: 'addr_test1qz...3n2p',
+      address: 'addr_test1qq4mns88y6gj6klz0wzqk2c8tkk3j8s4cm2g3e3k2k5lh0x8s8',
       status: 'Active',
       epoch: 112
     },
@@ -36,7 +38,7 @@ export function Deployment() {
       network: 'PREVIEW',
       version: 'v2.5.0-dev',
       name: 'experimental-v3',
-      address: 'addr_test1qp...8x4k',
+      address: 'addr_test1qr8k8xw0z6rqxw5h0t7n45l6du9n8e2f8qkavq9xm2p9hfpvtn',
       status: 'Active',
       epoch: 89
     }
@@ -48,11 +50,12 @@ export function Deployment() {
       network: 'PREVIEW',
       version: 'v2.5.1-rc',
       name: `deployment-${Math.floor(Math.random() * 1000)}`,
-      address: 'addr_test1...pending',
+      address: 'addr_test1qz8x4k2v4y5q6r7s8t9u0v1w2x3y4z5a6b7c8d9e0f1g2h3',
       status: 'Deploying',
       epoch: 90
     };
     setDeployments([newDeployment, ...deployments]);
+    addToast({ type: 'success', message: `Deployment created: ${newDeployment.name}` });
   };
 
   const getNetworkColor = (network: string) => {
@@ -61,6 +64,14 @@ export function Deployment() {
       case 'PREPROD': return 'text-amber border-amber/30 bg-amber/20';
       default: return 'text-terminal-blue border-terminal-blue/30 bg-terminal-blue/20';
     }
+  };
+
+  const handleExplorer = (address: string, network: DeploymentItem['network']) => {
+    const base = network === 'MAINNET'
+      ? 'https://cardanoscan.io/address/'
+      : 'https://preprod.cardanoscan.io/address/';
+    window.open(`${base}${address}`, '_blank', 'noopener,noreferrer');
+    addToast({ type: 'info', message: 'Opened explorer.' });
   };
 
   return <div className="p-8 max-w-5xl mx-auto h-full overflow-y-auto">
@@ -99,9 +110,12 @@ export function Deployment() {
               {deploy.name}
             </h3>
             
-            <a href="#" className="text-terminal-blue hover:underline text-sm mb-6 block font-mono">
+            <button
+              onClick={() => handleExplorer(deploy.address, deploy.network)}
+              className="text-terminal-blue hover:underline text-sm mb-6 block font-mono text-left"
+            >
               {deploy.address}
-            </a>
+            </button>
 
             <div className="flex items-center gap-4 text-sm text-theme-muted">
               <div className="flex items-center gap-1.5">

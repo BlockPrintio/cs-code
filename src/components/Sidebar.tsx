@@ -6,10 +6,12 @@ type View = 'landing' | 'dashboard' | 'editor' | 'templates' | 'testing' | 'wall
 interface SidebarProps {
   currentView: View;
   onChangeView: (view: View) => void;
+  onLogout?: () => void;
 }
 export function Sidebar({
   currentView,
-  onChangeView
+  onChangeView,
+  onLogout
 }: SidebarProps) {
   const navItems = [{
     id: 'dashboard',
@@ -70,7 +72,11 @@ export function Sidebar({
 
       <div className="flex flex-col gap-4 w-full px-2 mt-auto">
 
-        <button title="Log Out" className="p-3 text-theme-muted hover:text-terminal-red hover:bg-terminal-red/10 rounded-lg transition-colors flex justify-center">
+        <button
+          title="Log Out"
+          onClick={onLogout}
+          className="p-3 text-theme-muted hover:text-terminal-red hover:bg-terminal-red/10 rounded-lg transition-colors flex justify-center"
+        >
           <LogOut size={20} />
         </button>
       </div>

@@ -12,6 +12,7 @@ interface DashboardProps {
   onDownloadProject?: (projectId: string) => void;
   onPushProject?: (projectId: string) => void;
   onRenameProject?: (projectId: string, newTitle: string) => void;
+  onUseTemplate?: (template: { title: string; description: string; tags: string[] }) => void;
 }
 
 export function Dashboard({
@@ -21,7 +22,8 @@ export function Dashboard({
   onSignIn,
   onDownloadProject,
   onPushProject,
-  onRenameProject
+  onRenameProject,
+  onUseTemplate
 }: DashboardProps) {
     return <div className="p-4 sm:p-6 lg:p-8 h-full overflow-y-auto">
       <header className="mb-8 flex flex-col lg:flex-row lg:justify-between lg:items-end gap-4">
@@ -83,10 +85,10 @@ export function Dashboard({
       <div className="mt-16">
         <h2 className="text-xl font-bold text-theme-text mb-6">Recommended Templates</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          <TemplateCard title="React + Vite + TS" description="Modern frontend stack with fast HMR and TypeScript configuration." tags={['Frontend', 'React', 'Vite']} stars={1240} color="#61DAFB" icon={<Atom size={20} />} />
-          <TemplateCard title="Next.js Fullstack" description="Complete Next.js 14 setup with App Router, Prisma, and Tailwind." tags={['Fullstack', 'Next.js', 'Prisma']} stars={3500} color="#ffffff" icon={<Layers size={20} />} />
-          <TemplateCard title="Plutus + Aiken Starter" description="Cardano validator script development environment with testing framework." tags={['Web3', 'Plutus', 'Aiken']} stars={890} color="#f1fa8c" icon={<Shield size={20} />} />
-          <TemplateCard title="Rust WebAssembly" description="High-performance WASM modules with Rust and wasm-pack." tags={['Systems', 'Rust', 'WASM']} stars={650} color="#ff5555" icon={<Cpu size={20} />} />
+          <TemplateCard title="React + Vite + TS" description="Modern frontend stack with fast HMR and TypeScript configuration." tags={['Frontend', 'React', 'Vite']} stars={1240} color="#61DAFB" icon={<Atom size={20} />} onSelect={() => onUseTemplate?.({ title: 'React + Vite + TS', description: 'Modern frontend stack with fast HMR and TypeScript configuration.', tags: ['Frontend', 'React', 'Vite'] })} />
+          <TemplateCard title="Next.js Fullstack" description="Complete Next.js 14 setup with App Router, Prisma, and Tailwind." tags={['Fullstack', 'Next.js', 'Prisma']} stars={3500} color="#ffffff" icon={<Layers size={20} />} onSelect={() => onUseTemplate?.({ title: 'Next.js Fullstack', description: 'Complete Next.js 14 setup with App Router, Prisma, and Tailwind.', tags: ['Fullstack', 'Next.js', 'Prisma'] })} />
+          <TemplateCard title="Plutus + Aiken Starter" description="Cardano validator script development environment with testing framework." tags={['Web3', 'Plutus', 'Aiken']} stars={890} color="#f1fa8c" icon={<Shield size={20} />} onSelect={() => onUseTemplate?.({ title: 'Plutus + Aiken Starter', description: 'Cardano validator script development environment with testing framework.', tags: ['Web3', 'Plutus', 'Aiken'] })} />
+          <TemplateCard title="Rust WebAssembly" description="High-performance WASM modules with Rust and wasm-pack." tags={['Systems', 'Rust', 'WASM']} stars={650} color="#ff5555" icon={<Cpu size={20} />} onSelect={() => onUseTemplate?.({ title: 'Rust WebAssembly', description: 'High-performance WASM modules with Rust and wasm-pack.', tags: ['Systems', 'Rust', 'WASM'] })} />
         </div>
       </div>
     </div>;

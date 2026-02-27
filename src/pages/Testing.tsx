@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { ConsoleLog } from '../components/ConsoleLog';
 import { Play, RotateCcw, Filter, Loader2 } from 'lucide-react';
+import { useToast } from '../components/ToastProvider';
 
 export function Testing() {
+  const { addToast } = useToast();
   interface LogEntry {
     id: string;
     timestamp: string;
@@ -12,6 +14,7 @@ export function Testing() {
   }
 
   const [isRunning, setIsRunning] = useState(false);
+  const [showFailuresOnly, setShowFailuresOnly] = useState(false);
   const [logs, setLogs] = useState<LogEntry[]>([
     {
       id: '1',
@@ -22,6 +25,8 @@ export function Testing() {
     },
     // ... initial logs or empty
   ]);
+
+  const displayLogs = showFailuresOnly ? logs.filter(log => log.type === 'error') : logs;
 
   const runTests = () => {
     setIsRunning(true);
@@ -67,12 +72,24 @@ export function Testing() {
           Test Runner
         </h2>
         <div className="flex gap-2">
-          <button className="flex items-center gap-2 px-3 py-1.5 bg-charcoal-lighter hover:bg-charcoal-light text-theme-muted hover:text-theme-text rounded text-sm transition-colors">
+          <button
+            onClick={() => {
+              setShowFailuresOnly(prev => {
+                const next = !prev;
+                addToast({ type: 'info', message: next ? 'Showing failures only.' : 'Showing all logs.' });
+                return next;
+              });
+            }}
+            className={`flex items-center gap-2 px-3 py-1.5 rounded text-sm transition-colors ${showFailuresOnly ? 'bg-terminal-red/20 text-terminal-red' : 'bg-charcoal-lighter hover:bg-charcoal-light text-theme-muted hover:text-theme-text'}`}
+          >
             <Filter size={14} />
-            Filter
+            {showFailuresOnly ? 'Failures' : 'Filter'}
           </button>
           <button 
-            onClick={() => setLogs([])}
+            onClick={() => {
+              setLogs([]);
+              addToast({ type: 'info', message: 'Logs reset.' });
+            }}
             className="flex items-center gap-2 px-3 py-1.5 bg-charcoal-lighter hover:bg-charcoal-light text-theme-muted hover:text-theme-text rounded text-sm transition-colors">
             <RotateCcw size={14} />
             Reset
@@ -103,7 +120,7 @@ export function Testing() {
         </div>
 
         <div className="col-span-2 flex flex-col min-h-0">
-          <ConsoleLog logs={logs} />
+          <ConsoleLog logs={displayLogs} />
         </div>
       </div>
     </div>;

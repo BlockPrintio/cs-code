@@ -8,6 +8,7 @@ interface TemplateCardProps {
   stars: number;
   color: string;
   icon?: React.ReactNode;
+  onSelect?: () => void;
 }
 export function TemplateCard({
   title,
@@ -15,11 +16,19 @@ export function TemplateCard({
   tags,
   stars,
   color,
-  icon
+  icon,
+  onSelect
 }: TemplateCardProps) {
   return <motion.div whileHover={{
     scale: 1.01
-  }} className="bg-charcoal-light border border-charcoal-lighter rounded-lg p-5 hover:border-gray-600 transition-all cursor-pointer group">
+  }}
+    onClick={onSelect}
+    onKeyDown={(e) => {
+      if (e.key === 'Enter' || e.key === ' ') onSelect?.();
+    }}
+    role="button"
+    tabIndex={0}
+    className="bg-charcoal-light border border-charcoal-lighter rounded-lg p-5 hover:border-gray-600 transition-all cursor-pointer group">
       <div className="flex justify-between items-start mb-4">
         <div className="w-10 h-10 rounded flex items-center justify-center mb-2" style={{
         backgroundColor: `${color}20`,

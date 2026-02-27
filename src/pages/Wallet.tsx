@@ -1,6 +1,28 @@
 import React from 'react';
 import { Wallet as WalletIcon, Copy, ExternalLink, RefreshCw } from 'lucide-react';
+import { useToast } from '../components/ToastProvider';
 export function Wallet() {
+  const { addToast } = useToast();
+  const walletAddress = 'addr1qxy2kgd9r7xj8c9e4p2j9v3xk6n7r0x8t9u0v1w2x3y4z5';
+  const displayAddress = `${walletAddress.slice(0, 10)}...${walletAddress.slice(-6)}`;
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(walletAddress);
+      addToast({ type: 'success', message: 'Wallet address copied.' });
+    } catch (e) {
+      addToast({ type: 'error', message: 'Copy failed.' });
+    }
+  };
+
+  const handleExplorer = () => {
+    window.open(`https://cardanoscan.io/address/${walletAddress}`, '_blank', 'noopener,noreferrer');
+    addToast({ type: 'info', message: 'Opened Cardanoscan.' });
+  };
+
+  const handleRefresh = () => {
+    addToast({ type: 'info', message: 'Wallet data refreshed.' });
+  };
   return <div className="p-8 max-w-4xl mx-auto">
       <h1 className="text-3xl font-bold text-gray-100 mb-8">
         Wallet Management
@@ -33,13 +55,13 @@ export function Wallet() {
 
             <div className="bg-charcoal-dark/50 rounded-lg p-3 flex items-center justify-between border border-charcoal-dark">
               <code className="text-gray-300 text-sm font-mono">
-                addr1...9a23
+                {displayAddress}
               </code>
               <div className="flex gap-2">
-                <button title="Copy address" className="p-1.5 hover:bg-charcoal-light rounded text-gray-400 hover:text-white transition-colors">
+                <button onClick={handleCopy} title="Copy address" className="p-1.5 hover:bg-charcoal-light rounded text-gray-400 hover:text-white transition-colors">
                   <Copy size={16} />
                 </button>
-                <button title="View on explorer" className="p-1.5 hover:bg-charcoal-light rounded text-gray-400 hover:text-white transition-colors">
+                <button onClick={handleExplorer} title="View on explorer" className="p-1.5 hover:bg-charcoal-light rounded text-gray-400 hover:text-white transition-colors">
                   <ExternalLink size={16} />
                 </button>
               </div>
@@ -80,7 +102,7 @@ export function Wallet() {
       <div className="bg-charcoal-light border border-charcoal-lighter rounded-xl overflow-hidden">
         <div className="p-4 border-b border-charcoal-lighter flex justify-between items-center">
           <h3 className="font-bold text-gray-200">Recent Transactions</h3>
-          <button title="Refresh transactions" className="text-gray-500 hover:text-white transition-colors">
+          <button onClick={handleRefresh} title="Refresh transactions" className="text-gray-500 hover:text-white transition-colors">
             <RefreshCw size={16} />
           </button>
         </div>
