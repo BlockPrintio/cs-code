@@ -7,13 +7,15 @@ interface TemplateCardProps {
   tags: string[];
   stars: number;
   color: string;
+  icon?: React.ReactNode;
 }
 export function TemplateCard({
   title,
   description,
   tags,
   stars,
-  color
+  color,
+  icon
 }: TemplateCardProps) {
   return <motion.div whileHover={{
     scale: 1.01
@@ -23,7 +25,7 @@ export function TemplateCard({
         backgroundColor: `${color}20`,
         color: color
       } as React.CSSProperties}>
-          <div className="w-5 h-5 rounded-full"></div>
+          {icon ? icon : <div className="w-5 h-5 rounded-full"></div>}
         </div>
         <div className="flex items-center gap-1 text-xs text-theme-muted font-mono">
           <Star size={12} className="text-terminal-yellow" fill="currentColor" />

@@ -1,7 +1,7 @@
 import React from 'react';
 import { ProjectCard } from '../components/ProjectCard';
 import { TemplateCard } from '../components/TemplateCard';
-import { Plus } from 'lucide-react';
+import { Plus, Atom, Layers, Shield, Cpu } from 'lucide-react';
 import { Project } from '../types';
 
 interface DashboardProps {
@@ -45,10 +45,10 @@ export function Dashboard({ projects, onOpenProject, onCreateProject }: Dashboar
       <div className="mt-16">
         <h2 className="text-xl font-bold text-theme-text mb-6">Recommended Templates</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          <TemplateCard title="React + Vite + TS" description="Modern frontend stack with fast HMR and TypeScript configuration." tags={['Frontend', 'React', 'Vite']} stars={1240} color="#61DAFB" />
-          <TemplateCard title="Next.js Fullstack" description="Complete Next.js 14 setup with App Router, Prisma, and Tailwind." tags={['Fullstack', 'Next.js', 'Prisma']} stars={3500} color="#ffffff" />
-          <TemplateCard title="Plutus + Aiken Starter" description="Cardano validator script development environment with testing framework." tags={['Web3', 'Plutus', 'Aiken']} stars={890} color="#f1fa8c" />
-          <TemplateCard title="Rust WebAssembly" description="High-performance WASM modules with Rust and wasm-pack." tags={['Systems', 'Rust', 'WASM']} stars={650} color="#ff5555" />
+          <TemplateCard title="React + Vite + TS" description="Modern frontend stack with fast HMR and TypeScript configuration." tags={['Frontend', 'React', 'Vite']} stars={1240} color="#61DAFB" icon={<Atom size={20} />} />
+          <TemplateCard title="Next.js Fullstack" description="Complete Next.js 14 setup with App Router, Prisma, and Tailwind." tags={['Fullstack', 'Next.js', 'Prisma']} stars={3500} color="#ffffff" icon={<Layers size={20} />} />
+          <TemplateCard title="Plutus + Aiken Starter" description="Cardano validator script development environment with testing framework." tags={['Web3', 'Plutus', 'Aiken']} stars={890} color="#f1fa8c" icon={<Shield size={20} />} />
+          <TemplateCard title="Rust WebAssembly" description="High-performance WASM modules with Rust and wasm-pack." tags={['Systems', 'Rust', 'WASM']} stars={650} color="#ff5555" icon={<Cpu size={20} />} />
         </div>
       </div>
     </div>;

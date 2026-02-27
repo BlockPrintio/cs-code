@@ -1,6 +1,6 @@
 import React from 'react';
 import { TemplateCard } from '../components/TemplateCard';
-import { Search } from 'lucide-react';
+import { Search, Atom, Layers, Shield, Cpu, Server, BarChart3 } from 'lucide-react';
 export function Templates() {
   return <div className="p-8 h-full overflow-y-auto">
       <header className="mb-8">
@@ -18,12 +18,12 @@ export function Templates() {
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        <TemplateCard title="React + Vite + TS" description="Modern frontend stack with fast HMR and TypeScript configuration." tags={['Frontend', 'React', 'Vite']} stars={1240} color="#61DAFB" />
-        <TemplateCard title="Next.js Fullstack" description="Complete Next.js 14 setup with App Router, Prisma, and Tailwind." tags={['Fullstack', 'Next.js', 'Prisma']} stars={3500} color="#ffffff" />
-        <TemplateCard title="Plutus + Aiken Starter" description="Cardano validator script development environment with testing framework." tags={['Web3', 'Plutus', 'Aiken']} stars={890} color="#f1fa8c" />
-        <TemplateCard title="Rust WebAssembly" description="High-performance WASM modules with Rust and wasm-pack." tags={['Systems', 'Rust', 'WASM']} stars={650} color="#ff5555" />
-        <TemplateCard title="Express API" description="RESTful API starter with Swagger docs and JWT auth." tags={['Backend', 'Node', 'Express']} stars={420} color="#50fa7b" />
-        <TemplateCard title="Python Data Science" description="Jupyter notebook environment with Pandas and PyTorch." tags={['Data', 'Python', 'AI']} stars={1100} color="#bd93f9" />
+        <TemplateCard title="React + Vite + TS" description="Modern frontend stack with fast HMR and TypeScript configuration." tags={['Frontend', 'React', 'Vite']} stars={1240} color="#61DAFB" icon={<Atom size={20} />} />
+        <TemplateCard title="Next.js Fullstack" description="Complete Next.js 14 setup with App Router, Prisma, and Tailwind." tags={['Fullstack', 'Next.js', 'Prisma']} stars={3500} color="#ffffff" icon={<Layers size={20} />} />
+        <TemplateCard title="Plutus + Aiken Starter" description="Cardano validator script development environment with testing framework." tags={['Web3', 'Plutus', 'Aiken']} stars={890} color="#f1fa8c" icon={<Shield size={20} />} />
+        <TemplateCard title="Rust WebAssembly" description="High-performance WASM modules with Rust and wasm-pack." tags={['Systems', 'Rust', 'WASM']} stars={650} color="#ff5555" icon={<Cpu size={20} />} />
+        <TemplateCard title="Express API" description="RESTful API starter with Swagger docs and JWT auth." tags={['Backend', 'Node', 'Express']} stars={420} color="#50fa7b" icon={<Server size={20} />} />
+        <TemplateCard title="Python Data Science" description="Jupyter notebook environment with Pandas and PyTorch." tags={['Data', 'Python', 'AI']} stars={1100} color="#bd93f9" icon={<BarChart3 size={20} />} />
       </div>
     </div>;
 }
