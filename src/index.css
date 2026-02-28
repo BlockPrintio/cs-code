@@ -79,8 +79,8 @@
 /* Dark Theme (default) */
 .theme-dark {
   --c-bg: #020617; /* Slate 950 */
-  --c-bg-dark: #0f172a; /* Slate 900 */
-  --c-bg-light: #1e293b; /* Slate 800 */
+  --c-bg-dark: #020617; /* Fixed dark background */
+  --c-bg-light: #0f172a; /* Secondary dark surface */
   --c-text: #f8fafc; /* Slate 50 */
   --c-muted: #94a3b8; /* Slate 400 */
   --c-amber: #fbbf24; /* Amber 400 */
@@ -89,8 +89,8 @@
   --c-scrollbar-hover: #475569; /* Slate 600 */
   /* Tailwind-friendly CSS variables */
   --color-charcoal: #020617;
-  --color-charcoal-dark: #0f172a;
-  --color-charcoal-light: #1e293b;
+  --color-charcoal-dark: #020617;
+  --color-charcoal-light: #0f172a;
   --color-charcoal-lighter: #334155; /* Slate 700 */
   --color-amber: #fbbf24;
   --color-amber-dim: #d97706;
@@ -136,7 +136,37 @@
   background-color: #cbd5e1; /* Slate 300 */
   color: #0f172a;
 }
-/* Removed redundant !important overrides since base styles now use variables */
+/* Light mode contrast overrides for hardcoded utility text classes */
+.theme-light .text-white,
+.theme-light .text-slate-50,
+.theme-light .text-slate-100,
+.theme-light .text-slate-200,
+.theme-light .text-slate-300,
+.theme-light .text-gray-100,
+.theme-light .text-gray-200,
+.theme-light .text-gray-300 {
+  color: #0f172a !important;
+}
+
+.theme-light .text-slate-400,
+.theme-light .text-slate-500,
+.theme-light .text-gray-400,
+.theme-light .text-gray-500 {
+  color: #334155 !important;
+}
+
+.theme-light .placeholder\:text-slate-500::placeholder,
+.theme-light .placeholder\:text-slate-400::placeholder,
+.theme-light input::placeholder,
+.theme-light textarea::placeholder {
+  color: #64748b !important;
+}
+
+.theme-light select,
+.theme-light option {
+  color: #0f172a;
+  background-color: #ffffff;
+}
 
 /* Tint Theme (Deep Indigo) */
 .theme-tint {

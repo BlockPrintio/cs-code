@@ -148,24 +148,24 @@ export function Settings() {
 
 
   return (
-    <div className="p-8 h-full overflow-y-auto max-w-4xl mx-auto">
+    <div className="p-8 h-full overflow-y-auto max-w-4xl mx-auto text-theme-text">
       <header className="mb-8 border-b border-charcoal-light pb-4">
-        <h1 className="text-3xl font-bold text-gray-100 flex items-center gap-3">
+        <h1 className="text-3xl font-bold text-theme-text flex items-center gap-3">
           <SettingsIcon className="text-amber" /> Settings
         </h1>
-        <p className="text-gray-500 mt-2">Customize your development environment.</p>
+        <p className="text-theme-muted mt-2">Customize your development environment.</p>
       </header>
 
       <div className="space-y-8">
         {/* Appearance Section */}
-        <section className="bg-charcoal-dark/50 p-6 rounded-xl border border-charcoal-light">
-          <h2 className="text-xl font-semibold text-gray-100 mb-4 flex items-center gap-2">
+        <section className="bg-charcoal p-6 rounded-xl border border-charcoal-light">
+          <h2 className="text-xl font-semibold text-theme-text mb-4 flex items-center gap-2">
             <Layout size={20} className="text-blue-400" /> Appearance
           </h2>
           
           <div className="grid gap-6">
             <div className="space-y-3">
-              <label className="text-sm font-medium text-gray-300">Theme</label>
+              <label className="text-sm font-medium text-theme-text">Theme</label>
               <div className="grid grid-cols-3 gap-4">
                 <button
                   onClick={() => setTheme('light')}
@@ -200,14 +200,14 @@ export function Settings() {
         </section>
 
         {/* Editor Section */}
-        <section className="bg-charcoal-dark/50 p-6 rounded-xl border border-charcoal-light">
-          <h2 className="text-xl font-semibold text-gray-100 mb-4 flex items-center gap-2">
+        <section className="bg-charcoal p-6 rounded-xl border border-charcoal-light">
+          <h2 className="text-xl font-semibold text-theme-text mb-4 flex items-center gap-2">
             <FileCode size={20} className="text-green-400" /> Editor
           </h2>
 
           <div className="grid gap-6 md:grid-cols-2">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-300 flex items-center gap-2">
+              <label className="text-sm font-medium text-theme-text flex items-center gap-2">
                 <Type size={16} /> Font Size ({fontSize}px)
               </label>
               <input
@@ -221,13 +221,13 @@ export function Settings() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-300 flex items-center gap-2">
+              <label className="text-sm font-medium text-theme-text flex items-center gap-2">
                  <Keyboard size={16} /> Key Binding
               </label>
               <select
                 value={keybinding}
                 onChange={(e) => setKeybinding(e.target.value as any)}
-                className="w-full p-2 bg-charcoal border border-charcoal-light rounded-lg text-gray-200 focus:border-amber focus:outline-none"
+                className="w-full p-2 bg-charcoal border border-charcoal-light rounded-lg text-theme-text focus:border-amber focus:outline-none"
               >
                 <option value="default">Standard</option>
                 <option value="vim">Vim</option>
@@ -236,13 +236,13 @@ export function Settings() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-300 flex items-center gap-2">
+              <label className="text-sm font-medium text-theme-text flex items-center gap-2">
                 Tab Size
               </label>
               <select
                 value={tabSize}
                 onChange={(e) => setTabSize(Number(e.target.value))}
-                className="w-full p-2 bg-charcoal border border-charcoal-light rounded-lg text-gray-200 focus:border-amber focus:outline-none"
+                className="w-full p-2 bg-charcoal border border-charcoal-light rounded-lg text-theme-text focus:border-amber focus:outline-none"
               >
                 <option value={2}>2 Spaces</option>
                 <option value={4}>4 Spaces</option>
@@ -251,13 +251,13 @@ export function Settings() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-300 flex items-center gap-2">
+              <label className="text-sm font-medium text-theme-text flex items-center gap-2">
                 <ListOrdered size={16} /> Line Numbers
               </label>
               <select
                 value={lineNumbers}
                 onChange={(e) => setLineNumbers(e.target.value as any)}
-                className="w-full p-2 bg-charcoal border border-charcoal-light rounded-lg text-gray-200 focus:border-amber focus:outline-none"
+                className="w-full p-2 bg-charcoal border border-charcoal-light rounded-lg text-theme-text focus:border-amber focus:outline-none"
               >
                 <option value="on">On</option>
                 <option value="off">Off</option>
@@ -266,7 +266,7 @@ export function Settings() {
             </div>
 
              <div className="flex items-center justify-between p-3 bg-charcoal rounded-lg border border-charcoal-light">
-              <label className="text-sm font-medium text-gray-300 flex items-center gap-2 cursor-pointer" onClick={() => setMinimap(!minimap)}>
+              <label className="text-sm font-medium text-theme-text flex items-center gap-2 cursor-pointer" onClick={() => setMinimap(!minimap)}>
                 <Map size={16} /> Minimap
               </label>
               <button
@@ -278,7 +278,7 @@ export function Settings() {
             </div>
 
             <div className="flex items-center justify-between p-3 bg-charcoal rounded-lg border border-charcoal-light">
-              <label className="text-sm font-medium text-gray-300 flex items-center gap-2 cursor-pointer" onClick={() => setWordWrap(wordWrap === 'on' ? 'off' : 'on')}>
+              <label className="text-sm font-medium text-theme-text flex items-center gap-2 cursor-pointer" onClick={() => setWordWrap(wordWrap === 'on' ? 'off' : 'on')}>
                 <WrapText size={16} /> Word Wrap
               </label>
               <button
@@ -290,7 +290,7 @@ export function Settings() {
             </div>
 
              <div className="flex items-center justify-between p-3 bg-charcoal rounded-lg border border-charcoal-light">
-              <label className="text-sm font-medium text-gray-300 flex items-center gap-2 cursor-pointer" onClick={() => setAutoSave(!autoSave)}>
+              <label className="text-sm font-medium text-theme-text flex items-center gap-2 cursor-pointer" onClick={() => setAutoSave(!autoSave)}>
                 Auto Save
               </label>
               <button

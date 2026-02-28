@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Play, RefreshCw, ExternalLink, Maximize2 } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { Play, RefreshCw, ExternalLink } from 'lucide-react';
 
 interface SandboxPreviewProps {
   files: Record<string, string>;
@@ -14,17 +14,15 @@ export interface ConsoleLog {
   timestamp: number;
 }
 
-export function SandboxPreview({ files, activeFile, onConsoleLog }: SandboxPreviewProps) {
+export function SandboxPreview({ files, onConsoleLog }: SandboxPreviewProps) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const [consoleLogs, setConsoleLogs] = useState<ConsoleLog[]>([]);
+  const objectUrlRef = useRef<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const bundleAndRun = () => {
     setIsLoading(true);
     setError(null);
-    const newLogs: ConsoleLog[] = [];
-
     try {
       // Create a sandbox HTML document with all files
       const htmlFile = files['index.html'] || files[Object.keys(files).find(k => k.endsWith('.html')) || ''] || '';
@@ -138,18 +136,24 @@ export function SandboxPreview({ files, activeFile, onConsoleLog }: SandboxPrevi
 </html>`;
 
       if (iframeRef.current) {
+        if (objectUrlRef.current) {
+          URL.revokeObjectURL(objectUrlRef.current);
+        }
         const blob = new Blob([sandboxHTML], { type: 'text/html' });
         const url = URL.createObjectURL(blob);
+        objectUrlRef.current = url;
         iframeRef.current.src = url;
       }
     } catch (err: any) {
       setError(err.message || 'Failed to create sandbox');
-      newLogs.push({
-        id: Date.now().toString(),
-        type: 'error',
-        message: err.message || 'Bundling error',
-        timestamp: Date.now()
-      });
+      onConsoleLog?.([
+        {
+          id: Date.now().toString(),
+          type: 'error',
+          message: err.message || 'Bundling error',
+          timestamp: Date.now()
+        }
+      ]);
     } finally {
       setIsLoading(false);
     }
@@ -165,16 +169,13 @@ export function SandboxPreview({ files, activeFile, onConsoleLog }: SandboxPrevi
           message: event.data.message,
           timestamp: event.data.timestamp
         };
-        setConsoleLogs(prev => [...prev, log]);
-        if (onConsoleLog) {
-          onConsoleLog([...consoleLogs, log]);
-        }
+        onConsoleLog?.([log]);
       }
     };
 
     window.addEventListener('message', handleMessage);
     return () => window.removeEventListener('message', handleMessage);
-  }, [consoleLogs, onConsoleLog]);
+  }, [onConsoleLog]);
 
   // Auto-run on file changes
   useEffect(() => {
@@ -182,10 +183,10 @@ export function SandboxPreview({ files, activeFile, onConsoleLog }: SandboxPrevi
       bundleAndRun();
     }, 500);
     return () => clearTimeout(timeout);
-  }, [JSON.stringify(files)]);
+  }, [files]);
 
   const handleRefresh = () => {
-    setConsoleLogs([]);
+    onConsoleLog?.([]);
     bundleAndRun();
   };
 
@@ -194,6 +195,14 @@ export function SandboxPreview({ files, activeFile, onConsoleLog }: SandboxPrevi
       window.open(iframeRef.current.src, '_blank');
     }
   };
+
+  useEffect(() => {
+    return () => {
+      if (objectUrlRef.current) {
+        URL.revokeObjectURL(objectUrlRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div className="h-full flex flex-col bg-charcoal">

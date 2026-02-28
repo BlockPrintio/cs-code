@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Editor from '@monaco-editor/react';
 import Split from 'react-split';
 import { FileTree } from '../components/FileTree';
@@ -155,20 +155,7 @@ export function EditorPage({ project }: EditorPageProps) {
   }, []);
 
   // Theme change listener for Monaco
-  const [themeName, setThemeName] = useState<string>(() => {
-    try {
-      return (localStorage.getItem('cside:theme') as string) || 'dark';
-    } catch (e) {
-      return 'dark';
-    }
-  });
-  useEffect(() => {
-    const handler = (e: any) => {
-      if (typeof e?.detail === 'string') setThemeName(e.detail);
-    };
-    window.addEventListener('cside:themeChange', handler as EventListener);
-    return () => window.removeEventListener('cside:themeChange', handler as EventListener);
-  }, []);
+  // Monaco theme is handled directly in editor mount listeners.
 
   // Tab Size
   const [tabSize, setTabSize] = useState<number>(() => {
@@ -350,8 +337,7 @@ export function EditorPage({ project }: EditorPageProps) {
             const model = editor.getModel();
             const pos = editor.getPosition();
             if (!model || !pos) return;
-            const line = pos.lineNumber;
-            const column = pos.column;
+            const { lineNumber: line, column } = pos;
             const lineContent = model.getLineContent(line);
             const endColumn = lineContent.length + 1;
             const range = new monaco.Range(line, column, line, endColumn);
@@ -421,10 +407,10 @@ export function EditorPage({ project }: EditorPageProps) {
         {activeFileId && <Breadcrumb path={breadcrumbPath} />}
 
         <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-          <div className="flex-1 flex flex-col">
+          <div className="flex-1 min-h-0">
             {/* Editor + Right Panel */}
             <Split
-              className="flex-1 flex min-h-0"
+              className="h-full flex min-h-0"
               sizes={[60, 40]}
               minSize={[400, 300]}
               gutterSize={4}
@@ -507,7 +493,13 @@ export function EditorPage({ project }: EditorPageProps) {
                     <SandboxPreview 
                       files={filesForPreview}
                       activeFile={activeFile?.name}
-                      onConsoleLog={(logs) => setConsoleLogs(logs)}
+                      onConsoleLog={(logs) => {
+                        if (logs.length === 0) {
+                          setConsoleLogs([]);
+                          return;
+                        }
+                        setConsoleLogs(prev => [...prev, ...logs]);
+                      }}
                     />
                   )}
                   {rightPanel === 'dependencies' && (
@@ -528,54 +520,42 @@ export function EditorPage({ project }: EditorPageProps) {
                 </div>
               </div>
             </Split>
+          </div>
 
-            {/* Bottom Panel */}
-            <Split
-              className="border-t border-charcoal-lighter"
-              sizes={[70, 30]}
-              minSize={[0, 150]}
-              maxSize={[Infinity, 400]}
-              gutterSize={4}
-              direction="vertical"
-            >
-              <div />
-              <div className="bg-charcoal-darker">
-                {/* Bottom Panel Tabs */}
-                <div className="flex items-center gap-1 px-2 py-1 border-b border-charcoal-lighter">
-                  <button
-                    onClick={() => setBottomPanel('console')}
-                    className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
-                      bottomPanel === 'console'
-                        ? 'bg-amber-600 text-white'
-                        : 'text-slate-400 hover:text-slate-200 hover:bg-charcoal-lighter'
-                    }`}
-                  >
-                    Console
-                  </button>
-                  <button
-                    onClick={() => setBottomPanel('terminal')}
-                    className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
-                      bottomPanel === 'terminal'
-                        ? 'bg-amber-600 text-white'
-                        : 'text-slate-400 hover:text-slate-200 hover:bg-charcoal-lighter'
-                    }`}
-                  >
-                    Terminal
-                  </button>
-                </div>
+          {/* Bottom Panel */}
+          <div className="h-56 min-h-[180px] border-t border-charcoal-lighter bg-charcoal-darker flex flex-col">
+            <div className="flex items-center gap-1 px-2 py-1 border-b border-charcoal-lighter">
+              <button
+                onClick={() => setBottomPanel('console')}
+                className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
+                  bottomPanel === 'console'
+                    ? 'bg-amber-600 text-white'
+                    : 'text-slate-400 hover:text-slate-200 hover:bg-charcoal-lighter'
+                }`}
+              >
+                Console
+              </button>
+              <button
+                onClick={() => setBottomPanel('terminal')}
+                className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
+                  bottomPanel === 'terminal'
+                    ? 'bg-amber-600 text-white'
+                    : 'text-slate-400 hover:text-slate-200 hover:bg-charcoal-lighter'
+                }`}
+              >
+                Terminal
+              </button>
+            </div>
 
-                {/* Bottom Panel Content */}
-                <div className="h-full">
-                  {bottomPanel === 'console' ? (
-                    <ConsoleOutput logs={consoleLogs} onClear={handleClearConsole} />
-                  ) : (
-                    <div className="h-full p-3">
-                      <TerminalBar />
-                    </div>
-                  )}
+            <div className="flex-1 min-h-0">
+              {bottomPanel === 'console' ? (
+                <ConsoleOutput logs={consoleLogs} onClear={handleClearConsole} />
+              ) : (
+                <div className="h-full p-3">
+                  <TerminalBar />
                 </div>
-              </div>
-            </Split>
+              )}
+            </div>
           </div>
         </div>
       </div>
