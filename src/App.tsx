@@ -144,8 +144,6 @@ export function App() {
         addToast({ type: 'success', message: 'Signed in successfully.' });
       });
       window.history.replaceState({}, document.title, window.location.pathname);
-    } else {
-      fetchMe();
     }
     if (params.get('auth') === 'failed') {
       addToast({ type: 'error', message: 'Sign in failed.' });
