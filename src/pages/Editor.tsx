@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import Editor from '@monaco-editor/react';
 import Split from 'react-split';
 import { FileTree } from '../components/FileTree';
-import { TabBar } from '../components/TabBar';
+import { TabBar, OpenTab } from '../components/TabBar';
 import { Breadcrumb } from '../components/Breadcrumb';
 import { SandboxPreview, ConsoleLog } from '../components/SandboxPreview';
 import { ConsoleOutput } from '../components/ConsoleOutput';
@@ -18,6 +18,7 @@ interface EditorPageProps {
 
 export function EditorPage({ project }: EditorPageProps) {
   const [activeFileId, setActiveFileId] = useState<string | null>(null);
+  const [openTabs, setOpenTabs] = useState<OpenTab[]>([]);
   const [consoleLogs, setConsoleLogs] = useState<ConsoleLog[]>([]);
   const [rightPanel, setRightPanel] = useState<'preview' | 'dependencies' | 'cardano'>('preview');
   const [bottomPanel, setBottomPanel] = useState<'console' | 'terminal'>('console');
@@ -41,9 +42,46 @@ export function EditorPage({ project }: EditorPageProps) {
         return null;
       };
       const first = findFirstFile(project.files);
-      if (first) setActiveFileId(first.id);
+      if (first) {
+        setActiveFileId(first.id);
+        // Open first file in tab
+        if (!openTabs.find(t => t.id === first.id)) {
+          setOpenTabs([{ id: first.id, file: first }]);
+        }
+      }
     }
-  }, [project, activeFileId]);
+  }, [project, activeFileId, openTabs]);
+
+  // Handle opening a file in a new tab
+  const handleOpenFile = (file: FileNode) => {
+    // Don't allow opening folders
+    if (file.type === 'folder') return;
+    
+    // Check if already open
+    const existingTab = openTabs.find(t => t.id === file.id);
+    if (existingTab) {
+      setActiveFileId(file.id);
+    } else {
+      // Add new tab
+      setOpenTabs([...openTabs, { id: file.id, file }]);
+      setActiveFileId(file.id);
+    }
+  };
+
+  // Handle closing a tab
+  const handleCloseTab = (fileId: string) => {
+    const newTabs = openTabs.filter(t => t.id !== fileId);
+    setOpenTabs(newTabs);
+    
+    // If closed tab was active, switch to another tab or clear
+    if (activeFileId === fileId) {
+      if (newTabs.length > 0) {
+        setActiveFileId(newTabs[newTabs.length - 1].id);
+      } else {
+        setActiveFileId(null);
+      }
+    }
+  };
 
   const findFileById = (nodes: FileNode[], id: string): FileNode | null => {
     for (const node of nodes) {
@@ -398,11 +436,16 @@ export function EditorPage({ project }: EditorPageProps) {
       <FileTree 
         files={project?.files || []}
         activeFileId={activeFileId}
-        onSelectFile={(file) => setActiveFileId(file.id)}
+        onSelectFile={handleOpenFile}
       />
 
       <div className="flex-1 flex flex-col min-w-0 bg-charcoal">
-        <TabBar />
+        <TabBar 
+          tabs={openTabs}
+          activeFileId={activeFileId}
+          onSelectTab={setActiveFileId}
+          onCloseTab={handleCloseTab}
+        />
 
         {activeFileId && <Breadcrumb path={breadcrumbPath} />}
 
